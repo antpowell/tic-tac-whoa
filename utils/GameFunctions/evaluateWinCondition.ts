@@ -8,7 +8,7 @@ const didPlayerWin = (
   return winningArr.every((element) => playerPositions.includes(element));
 };
 
-export const evaluateWinCondition = () => {
+export const findWinner = () => {
   console.log("evaluating win condition...");
 
   let foundWinner = false;
@@ -24,16 +24,18 @@ export const evaluateWinCondition = () => {
     [2, 4, 6],
   ]);
 
+  let playerPositions =
+    GameContextSignal.value.currentTurn === "Player1"
+      ? Player1Signal.value.playerPositions.peek()
+      : Player2Signal.value.playerPositions.peek();
+
+  console.log(playerPositions);
+
   winningConditions.forEach((winningSet) => {
-    if (
-      didPlayerWin(
-        winningSet,
-        GameContextSignal.value.currentTurn === "Player1"
-          ? Player1Signal.value.playerPositions.peek()
-          : Player2Signal.value.playerPositions.peek(),
-      )
-    )
+    if (didPlayerWin(winningSet, playerPositions)) {
+      console.log(`${GameContextSignal.value.currentTurn} Wins!`);
       foundWinner = true;
+    }
   });
 
   return foundWinner;

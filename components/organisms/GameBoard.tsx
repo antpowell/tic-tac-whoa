@@ -6,10 +6,11 @@ import {
   GameContextSignal,
   GameState,
   SwapTurns,
+  boardWatcher,
 } from "@/utils/GameContextState";
 import { canPlayerMarkBePlaced } from "@/utils/GameFunctions/canPlayerMarkBePlaced";
 import { changeUser } from "@/utils/GameFunctions/changeUser";
-import { evaluateWinCondition } from "@/utils/GameFunctions/evaluateWinCondition";
+import { findWinner } from "@/utils/GameFunctions/evaluateWinCondition";
 import { Player1Signal, Player2Signal } from "@/utils/PlayerState";
 import { SquareState } from "@/utils/SquareState";
 import { effect, useSignalEffect } from "@preact/signals-react";
@@ -21,6 +22,8 @@ effect(() => {
   }
 });
 export const GameBoard = () => {
+  boardWatcher();
+
   return (
     <div className="flex h-[800px] min-h-[600px] w-[800px]  flex-wrap items-stretch ">
       {GameBoardStateSignal.value.map((_, index) => (
@@ -32,48 +35,42 @@ export const GameBoard = () => {
               `Square ${index} clicked by ${CurrentTurnStateSignal.value}`,
             );
 
-            if (!canPlayerMarkBePlaced(index)) return;
+            if (canPlayerMarkBePlaced(index)) {
+              continue;
+              playersMark.value =
+                CurrentTurnStateSignal.value === "Player1"
+                  ? SquareState.X
+                  : SquareState.O;
 
-            // if (playersMark.value !== SquareState.EMPTY) {
-            //   console.log("Cannot click on a filled square");
-            //   return;
-            // }
+              GameBoardStateSignal.value[index] = playersMark.value;
 
-            playersMark.value =
-              CurrentTurnStateSignal.value === "Player1"
-                ? SquareState.X
-                : SquareState.O;
+              CurrentTurnStateSignal.peek() === "Player1"
+                ? Player1Signal.value.playerPositions.value.push(index)
+                : Player2Signal.value.playerPositions.value.push(index);
 
-            GameBoardStateSignal.value[index] = playersMark.value;
+              console.log(GameBoardStateSignal.value);
 
-            CurrentTurnStateSignal.peek() === "Player1"
-              ? Player1Signal.value.playerPositions.value.push(index)
-              : Player2Signal.value.playerPositions.value.push(index);
+              console.log(
+                `Player1Signal: ${JSON.stringify(Player1Signal.peek(), null, 2)}`,
+              );
+              console.log(
+                `Player2Signal: ${JSON.stringify(Player2Signal.peek(), null, 2)}`,
+              );
 
-            console.log(GameBoardStateSignal.value);
+              changeUser();
 
-            console.log(
-              `Player1Signal: ${JSON.stringify(Player1Signal.peek(), null, 2)}`,
-            );
-            console.log(
-              `Player2Signal: ${JSON.stringify(Player2Signal.peek(), null, 2)}`,
-            );
+              GameContextSignal.value.moves = GameContextSignal.value.moves + 1;
 
-            changeUser();
+              // if (GameContextSignal.value.moves > 4) {
+              //   console.log(`evaluating game board...`);
+              //   findWinner() ? alert("Winner!") : null;
+              // }
 
-            GameContextSignal.value.moves = GameContextSignal.value.moves + 1;
-
-            if (GameContextSignal.value.moves > 4) {
-              console.log(`evaluating game board...`);
-              evaluateWinCondition() ? alert("Winner!") : null;
+              if (GameContextSignal.value.moves === 9) {
+                GameContextSignal.value.gameStatus = GameState.Draw;
+                alert("Draw!");
+              }
             }
-
-            if (GameContextSignal.value.moves === 9) {
-              GameContextSignal.value.gameStatus = GameState.Draw;
-              alert("Draw!");
-            }
-
-            // console.log(GameContextSignal.value.board);
           }}
         />
       ))}

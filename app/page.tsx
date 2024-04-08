@@ -1,6 +1,7 @@
-import { InputComponent } from "@/components/molecules/InputComponent";
-import { Dialog, dialogSignal } from "@/components/organisms/Dialog";
+import { Button } from "@/components/atoms/button";
+import { Dialog } from "@/components/organisms/Dialog";
 import { GameBoard } from "@/components/organisms/GameBoard";
+import { GameContextSignal } from "@/utils/GameContextState";
 
 export default function Home() {
   return (
@@ -9,6 +10,9 @@ export default function Home() {
         <h1 className="">Tic-Tac-WHOA</h1>
       </nav>
       <GameBoard />
+      {GameContextSignal.value.gameStatus === "GameOver" && (
+        <Button value={"Play Again"} />
+      )}
       {/* <InputComponent name="name" label="Name" placeholder="Enter your name" /> */}
       <Dialog />
     </main>

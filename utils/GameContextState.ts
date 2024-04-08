@@ -1,7 +1,7 @@
 import { Signal, signal } from "@preact/signals-react";
 import { GameBoardStateSignal } from "./GameBoardState";
 import { Player1Signal, Player2Signal, PlayerState } from "./PlayerState";
-import { evaluateWinCondition as hasWinner } from "./GameFunctions/evaluateWinCondition";
+import { findWinner } from "./GameFunctions/evaluateWinCondition";
 
 export enum GameState {
   Draw = "Draw",
@@ -25,7 +25,7 @@ export const CurrentTurnStateSignal = signal<"Player1" | "Player2">("Player1");
 export const boardWatcher = () => {
   if (GameContextSignal.value.moves > 4) {
     console.log(`evaluating game board...`);
-    hasWinner();
+    findWinner();
   }
 };
 

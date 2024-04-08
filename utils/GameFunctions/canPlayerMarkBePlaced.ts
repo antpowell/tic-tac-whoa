@@ -3,7 +3,6 @@ import { GameBoardStateSignal } from "../GameBoardState";
 import { GameContextSignal } from "../GameContextState";
 
 export const canPlayerMarkBePlaced = (square: number): boolean => {
-  console.log("Cannot click on a filled square");
   GameContextSignal.value.winner.value !== "" &&
     Dialog({
       title: "Game Over",
@@ -22,6 +21,7 @@ export const canPlayerMarkBePlaced = (square: number): boolean => {
     //   continueButtonText: "Continue",
     //   cancelButtonText: "Cancel",
     // });
+    console.log("Cannot click on a filled square");
     console.log(`opening dialog`);
     dialogSignal.value.open = true;
   }

@@ -1,4 +1,4 @@
-import { evaluateWinCondition } from "@/utils/GameFunctions/evaluateWinCondition";
+import { findWinner } from "@/utils/GameFunctions/evaluateWinCondition";
 import { describe, expect, it } from "vitest";
 
 describe("evaluateWinCondition", () => {
@@ -18,13 +18,13 @@ describe("evaluateWinCondition", () => {
 
   it("should return true if player has won", () => {
     winningPlayerPosition.forEach((winningPlayerPosition) => {
-      expect(evaluateWinCondition(winningPlayerPosition)).toBe(true);
+      expect(findWinner(winningPlayerPosition)).toBe(true);
     });
   });
 
   it("should return false if player has not won", () => {
     nonWinningPlayerPosition.forEach((nonWinningPlayerPosition) => {
-      expect(evaluateWinCondition(nonWinningPlayerPosition)).toBe(false);
+      expect(findWinner(nonWinningPlayerPosition)).toBe(false);
     });
   });
 });
