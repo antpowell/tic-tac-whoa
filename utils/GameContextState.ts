@@ -1,6 +1,7 @@
 import { Signal, signal } from "@preact/signals-react";
-import { SquareState } from "./SquareState";
 import { GameBoardStateSignal } from "./GameBoardState";
+import { Player1Signal, Player2Signal, PlayerState } from "./PlayerState";
+import { evaluateWinCondition as hasWinner } from "./GameFunctions/evaluateWinCondition";
 
 export enum GameState {
   Draw = "Draw",
@@ -15,16 +16,17 @@ export interface GameContext {
   winner: Signal<string>;
   moves: number;
   gameStatus: GameState;
+  gameBoard: typeof GameBoardStateSignal;
+  players: Array<Signal<PlayerState>>;
 }
 
 export const CurrentTurnStateSignal = signal<"Player1" | "Player2">("Player1");
 
-export const SwapTurns = () => {
-  console.log(
-    `Changing turn to ${CurrentTurnStateSignal.value === "Player1" ? "Player2" : "Player1"}`,
-  );
-  CurrentTurnStateSignal.value =
-    CurrentTurnStateSignal.value === "Player1" ? "Player2" : "Player1";
+export const boardWatcher = () => {
+  if (GameContextSignal.value.moves > 4) {
+    console.log(`evaluating game board...`);
+    hasWinner();
+  }
 };
 
 export const GameContextSignal = signal<GameContext>({
@@ -32,15 +34,6 @@ export const GameContextSignal = signal<GameContext>({
   moves: 0,
   gameStatus: GameState.InProgress,
   winner: signal<string>(""),
+  gameBoard: GameBoardStateSignal,
+  players: [Player1Signal, Player2Signal],
 });
-
-const winningConditions = [
-  [0, 1, 2],
-  [0, 3, 6],
-  [0, 4, 8],
-  [3, 4, 5],
-  [2, 5, 8],
-  [1, 4, 7],
-  [6, 7, 8],
-  [2, 4, 6],
-];

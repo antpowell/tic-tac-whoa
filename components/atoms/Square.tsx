@@ -1,11 +1,6 @@
 "use client";
-import { GameBoardState, GameBoardStateSignal } from "@/utils/GameBoardState";
-import {
-  CurrentTurnStateSignal,
-  GameContextSignal,
-} from "@/utils/GameContextState";
 import { SquareState } from "@/utils/SquareState";
-import { Signal, computed, effect, signal } from "@preact/signals-react";
+import { Signal, signal } from "@preact/signals-react";
 
 export const Square = ({
   index,
