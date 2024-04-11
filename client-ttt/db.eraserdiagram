@@ -1,0 +1,41 @@
+entity-relationship-diagram
+
+users [icon: user] {
+    id string pk
+    displayName string
+    games string
+}
+
+games [icon: users] {
+    sessionId string pk
+    players string
+
+}
+
+scoreboard [icon: bar-chart-2] {
+    gameSessionId string
+    player1 string
+    player1Score number
+    player2 string
+    player2Score number
+
+
+}
+
+invite [icon: mail] {
+    inviteId string
+    type string
+    gameSessionId string
+    inviterId string
+    startedAt timestamp
+    endedAt timestamp
+}
+
+users.games <> games.sessionId
+games.players <> users.id
+invite.gameSessionId - games.sessionId
+invite.inviterId > users.id
+scoreboard.gameSessionId - games.sessionId
+scoreboard.player1 - users.id
+scoreboard.player2 - users.id
+
