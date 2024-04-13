@@ -7,7 +7,14 @@
 // });
 import { serve } from 'bun';
 import { createServer } from 'http';
-import { changePlayerTurn, gameCleanUpProcess, roomCreator, type RoomData } from './functions/roomFunctions';
+import {
+  changePlayerTurn,
+  gameCleanUpProcess,
+  roomCreator,
+  type ActivePlayers,
+  type RoomData,
+  gameOver
+} from './functions/roomFunctions';
 
 const hostname = 'localhost';
 const port = 3003;
@@ -17,15 +24,20 @@ const httpServer = createServer();
 let roomData: RoomData = {
   gameRoom: [],
   waitingRoom: [],
-  activePlayers: {},
+  activePlayers: {} as ActivePlayers,
   roomFull: false,
-  nextTurn: 'Player1'
+  nextTurn: 'Player2'
 };
 
 const server = serve({
   fetch(req, server) {
     // upgrade the request to a WebSocket
-    if (server.upgrade(req)) {
+    const success = server.upgrade(req, {
+      data: {
+        socketId: Math.random()
+      }
+    });
+    if (success) {
       return; // do not return a Response
     }
     return new Response('Server upgrade failed :(', { status: 500 });
@@ -35,11 +47,10 @@ const server = serve({
       // ws.send('Server Received: ' + message);
       const { event, data } = await new Response(message).json();
 
-      console.log(`event === 'searchForRoom': ${event === 'searchForRoom'}`);
-
       if (event === 'searchForRoom') {
         // ws.send('Searching for room...');
-        roomData = await roomCreator({ name: data.name });
+
+        roomData = await roomCreator({ name: data.name, playerId: data.id });
 
         console.log(`roomData: ${JSON.stringify(roomData, null, 2)}`);
 
@@ -58,8 +69,7 @@ const server = serve({
       }
 
       if (event === 'playerMove') {
-        console.log(`event === 'playerMove': ${event === 'playerMove'}`);
-        console.log(JSON.stringify(data, null, 2));
+        console.log('playerMove', JSON.stringify(data, null, 2));
 
         if (data.currentPlayer === roomData.nextTurn) {
           ws.send(JSON.stringify({ event: 'currentGameData', data: roomData, error: 'It is not your turn' }));
@@ -76,12 +86,19 @@ const server = serve({
         if (data.currentPlayer !== roomData.nextTurn) {
           roomData.nextTurn = await changePlayerTurn(roomData.nextTurn);
         }
-        console.log(roomData.nextTurn);
       }
 
       if (event === 'resetGame') {
+        console.log(`winner: ${data.winner}`);
+        gameOver(data.winner);
         gameCleanUpProcess();
-        roomData = { ...roomData, gameRoom: [], activePlayers: {}, roomFull: false, nextTurn: 'Player2' };
+        roomData = {
+          ...roomData,
+          gameRoom: [],
+          activePlayers: {} as ActivePlayers,
+          roomFull: false,
+          nextTurn: 'Player2'
+        };
 
         ws.send(JSON.stringify({ event: 'currentGameData', data: roomData, error: null }));
         ws.publish('gameCommunication', JSON.stringify({ event: 'resetGame', data: {} }));

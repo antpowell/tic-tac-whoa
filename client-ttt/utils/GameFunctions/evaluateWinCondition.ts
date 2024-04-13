@@ -1,8 +1,7 @@
-import { dialogSignal } from '@/components/organisms/Dialog';
-import { getSocketService } from '@/services/socketService';
-import { Signal, computed } from '@preact/signals-react';
-import getGameContext, { GameState } from '../GameContextState';
+import { computed } from '@preact/signals-react';
 import { Player1Signal, Player2Signal } from '../PlayerState';
+import getGameContext from '../state/GameContextState/GameContextState';
+import { handleWinState } from './handleWinState';
 
 const didPlayerWin = (winningArr: Array<number>, playerPositions: Array<number>) => {
   let whoWon: 'Player1' | 'Player2' | null = null;
@@ -16,21 +15,10 @@ const didPlayerWin = (winningArr: Array<number>, playerPositions: Array<number>)
   return whoWon;
 };
 
-export const findWinner = (
-  {
-    // currentPlayer,
-    // gameStatus,
-    // dialogOpen
-  }: {
-    currentPlayer: Signal<'Player1' | 'Player2'>;
-    gameStatus: Signal<GameState>;
-    dialogOpen: Signal<boolean>;
-  }
-) => {
-  const { currentPlayer: currentPlayer, gameStatus, dialogOpen, resetGame } = getGameContext();
-  console.log('evaluating win condition...');
+const { currentPlayer: currentPlayer } = getGameContext();
 
-  const socketService = getSocketService().connect();
+export const findWinner = () => {
+  console.log('evaluating win condition...');
 
   let foundWinner = false;
 
@@ -56,31 +44,7 @@ export const findWinner = (
 
   winningConditions.forEach(winningSet => {
     const winner = didPlayerWin(winningSet, playerPositions.value);
-    if (winner) {
-      const title = `${winner} Wins!`;
-      const description = winner === currentPlayer.value ? 'Nice Job!' : 'Better luck next time!';
-      console.log(title);
-      console.log(description);
-      dialogSignal.value = {
-        ...dialogSignal.value,
-        title: title,
-        description: description,
-        open: true,
-        cancelButtonText: 'Close',
-        continueButtonText: 'Play Again',
-        onCancel: () => {
-          dialogOpen.value = false;
-        },
-        onContinue: () => {
-          socketService.emit('resetGame', {});
-          resetGame();
-        }
-      };
-
-      gameStatus.value = GameState.GameOver;
-      foundWinner = true;
-      dialogOpen.value = true;
-    }
+    if (winner) handleWinState(winner);
   });
 
   return foundWinner;

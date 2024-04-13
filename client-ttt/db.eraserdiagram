@@ -3,30 +3,25 @@ entity-relationship-diagram
 users [icon: user] {
     id string pk
     displayName string
-    games string
+    sessionId string
 }
 
 games [icon: users] {
     sessionId string pk
     players string
-
 }
 
 scoreboard [icon: bar-chart-2] {
     gameSessionId string
-    player1 string
-    player1Score number
-    player2 string
-    player2Score number
-
-
+    p1DisplayName string
+    p1Score number
+    p2DisplayName string
+    p2Score number
 }
 
-invite [icon: mail] {
-    inviteId string
-    type string
+room [icon: mail] {
+    roomId string
     gameSessionId string
-    inviterId string
     startedAt timestamp
     endedAt timestamp
 }
@@ -36,6 +31,6 @@ games.players <> users.id
 invite.gameSessionId - games.sessionId
 invite.inviterId > users.id
 scoreboard.gameSessionId - games.sessionId
-scoreboard.player1 - users.id
-scoreboard.player2 - users.id
+scoreboard.p1DisplayName - users.id
+scoreboard.p2DisplayName - users.id
 

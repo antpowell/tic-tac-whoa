@@ -1,18 +1,13 @@
-import { RestartBtn } from '@/components/atoms/RestartBtn';
-import { GameBoard } from '@/components/organisms/GameBoard';
-import { GameSearchSideBar } from '@/components/organisms/GameSearchSideBar';
+import { Game } from '@/components/templates/Game';
 
 export default function Home() {
   return (
     <main className="flex min-h-svh flex-col items-center justify-around">
+      <div className="flex items-center">
+        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">Tic-Tac-WHOA</h1>
+      </div>
       <div>
-        <div className="flex">
-          <h1 className="text-3xl font-bold">Tic-Tac-WHOA</h1>
-        </div>
-        <div>
-          <GameBoard />
-          <RestartBtn />
-        </div>
+        <Game />
       </div>
     </main>
   );

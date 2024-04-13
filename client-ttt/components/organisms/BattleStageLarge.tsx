@@ -1,9 +1,9 @@
 'use client';
 import { useSignals } from '@preact/signals-react/runtime';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { isRoomFull, playersInBattle } from '@/utils/Signals/signals';
+import { isRoomFull, playersInBattle, nextTurn } from '@/utils/Signals/signals';
 
-export const BattleStage = () => {
+export const BattleStageLarge = () => {
   useSignals();
 
   const constructUserProfileDisplay = () => {
@@ -12,7 +12,7 @@ export const BattleStage = () => {
       return (
         <div key={userData[1].id}>
           <div className="flex items-center gap-4">
-            <Avatar className="hidden h-11 w-11 sm:flex">
+            <Avatar className="hidden h-20 w-20 sm:flex">
               <AvatarImage src="https://github.com/shadcn.png" alt="Avatar" />
               <AvatarFallback>{userData[1].iconText}</AvatarFallback>
             </Avatar>
@@ -20,12 +20,11 @@ export const BattleStage = () => {
               <p className="text-lg font-medium leading-none">{userData[0]}</p>
               <p className="text-base text-muted-foreground">Player{userData[1].id}</p>
             </div>
-            <div className="ml-auto font-medium">{isRoomFull.value ? 'Playing...' : 'Waiting...'}</div>
           </div>
         </div>
       );
     });
   };
 
-  return <div>{constructUserProfileDisplay()}</div>;
+  return <div className="flex pb-16 justify-between">{constructUserProfileDisplay()}</div>;
 };

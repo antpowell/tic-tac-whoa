@@ -16,7 +16,6 @@ This file will be maintained as a running brain dump for others to have a better
 - Preact Signals
 - Shadcn
 - Prettier
-- Hono
 
 This project was created with Next.js using.
 
