@@ -16,8 +16,7 @@ This file will be maintained as a running brain dump for others to have a better
 - Preact Signals
 - Shadcn
 - Prettier
-
-This project was created with Next.js using.
+- Supabase
 
 - Next.js was chosen because it was a easy a framework that
 
@@ -43,6 +42,8 @@ This project was created with Next.js using.
    3. reduces the need for prop drilling
 
 - Prettier is used here to organize tailwind classes in a systematic way. I would traditionally like to only use eslint but as of now eslint can't organize tailwind and the tailwind documentation states that the prettier plugin is the best way to automatically sort tailwind utility classes[[1]](https://tailwindcss.com/blog/automatic-class-sorting-with-prettier#how-classes-are-sorted).
+
+Supabase is used in this project as the Postgres DB. It's a plus that it's an open source alternative to Firebase, which I have used in the pass. Documentation is pretty good to get up and running. Supabase also allows for easy data migration away or for self hosting. (No vender  lock in)
 
 ## Project structure philosophy
 

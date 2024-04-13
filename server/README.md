@@ -18,4 +18,5 @@ To run:
 bun run server.ts
 ```
 
-This project was created using `bun init` in bun v1.1.0. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+This project was created using `bun init` in bun v1.1.
+Unlike the client the server requires bun. Installation steps can be found [in th client README](../client-ttt/README.md)

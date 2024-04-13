@@ -1,4 +1,3 @@
-import { GameBoardStateSignal } from "../GameBoardState";
 import { SquareState } from "../SquareState";
 
 export const placePlayerMark = ({
