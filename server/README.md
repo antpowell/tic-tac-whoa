@@ -10,12 +10,14 @@ To install dependencies:
 
 ```bash {"id":"01HV1JR7HNN6KX37WWRV0QZWKN"}
 bun install
+
 ```
 
 To run:
 
 ```bash {"id":"01HV1JR7HNN6KX37WWRYN29M7B"}
-bun run server.ts
+bun server
+
 ```
 
 This project was created using `bun init` in bun v1.1.

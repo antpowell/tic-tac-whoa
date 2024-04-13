@@ -17,6 +17,8 @@ This file will be maintained as a running brain dump for others to have a better
 - Shadcn
 - Prettier
 - Supabase
+- Playwright
+
 
 - Next.js was chosen because it was a easy a framework that
 
@@ -45,6 +47,16 @@ This file will be maintained as a running brain dump for others to have a better
 
 Supabase is used in this project as the Postgres DB. It's a plus that it's an open source alternative to Firebase, which I have used in the pass. Documentation is pretty good to get up and running. Supabase also allows for easy data migration away or for self hosting. (No vender  lock in)
 
+Playwright is used as the testing library for the client. I generally like using playwright for all my testing related to UI work.
+
+Benefits of playwright
+  1. Has many useful dev tools, code generation for devs who are new to testing, live test inspector to watch your test in real time (helps with debugging), trace viewer that records test as they run in the background and allows for video playback to make sure the test runs in our heads as they do in the browser.
+  2. Test functionality of vs implementation
+  3. Has visual parity testing infra that allows teams to test visual regressions via photo or video
+  4. Great eco-system form documentation, video tutorials, discord, ect.
+  5. Has support for Typescript out of the box.
+  6. Comes with a pretty useful demo as an example for multiple scenarios.
+
 ## Project structure philosophy
 
 - I chose to keep all additional folders at root level and only add pages to the app folder in an attempt to make app structure easier to understand. Routeable pages will live in the app folder and the components use in those pages in the component folder.
@@ -60,6 +72,15 @@ For example:
 const test = signal({data: 0, values:{x: 0, y: 0}});
 test.value.values.x = 1; //❌This is not allowed
 text.value = {...test.value, values: {...test.value.values, x: 1}}}; //✅ This is allowed 
+
 ```
 
 Ref: [StackOverflow explanation](https://stackoverflow.com/questions/75876994/how-to-change-value-of-properties-with-signal#:~:text=The%20issue%20you%27re%20running%20into%20is%20that%20you%27re,to%20assign%20to%20the%20signal%27s%20value%20property%20directly.)
+
+Next.js is React but it's also has it's own learnings, pitfalls, and slowdowns to consider when coming from the old create-react-app ways.
+
+Since Bun is still new and just came out on windows the support for some frameworks are kinda hacky atm. It is really fast when downloading packages and running projects, like noticeably fast.
+
+Signals feel much better and easier to use than traditional useState useRef and useMemo hooks can't wait till React officially supports but the current state of Preact Signals project def can be incorporate into any project today with little to no friction.
+Some use cases for useEffect I don't think signals have a answer for like fetching data from apis inside a client component.
+Boilerplate setup in webpack or adding useSignals() in each react component is required atm to use signals. Not much of a pain but I think this could be worked out to be smoother with future versions or official support or implementation from the React team.

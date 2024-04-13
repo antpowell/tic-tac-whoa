@@ -9,10 +9,7 @@
     "typescript": "^5.0.0"
   },
   "scripts": {
-    "start": "bun index.ts",
-    "dev": "bun --inspect --watch index.ts",
-    "start-bun": "bun server.ts",
-    "dev-bun": "bun --inspect --watch server.ts"
+    "serve" : "bun --inspect --watch server.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.3.0",

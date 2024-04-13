@@ -4,7 +4,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import dbService from '@/services/dbService';
 import { useSignal } from '@preact/signals-react';
 import { useSignals } from '@preact/signals-react/runtime';
-import { get } from 'http';
 import { useEffect } from 'react';
 
 export default function ScoreBoard() {
