@@ -77,10 +77,10 @@ const createGameRoom = async (gameRoom: string[]) => {
   roomData.roomFull = true;
 };
 
-export const gameOver = async (winnerId: number) => {
+export const gameOver = async (winnerId?: number) => {
   const { error } = await dbService().updateGame({
     id: roomData.roomId!,
-    data: { ended_at: Date.now(), winner: winnerId }
+    data: { ended_at: Date.now(), winner: winnerId ? winnerId : null }
   });
 
   error === null ? (gameCleanUpProcess(), (roomData.roomId = undefined)) : null;

@@ -31,6 +31,23 @@ export const mapResponseMessages: ResponseMessageTypeMapper = {
     isRoomFull.value = data.data.roomFull;
     nextTurn.value = data.data.nextTurn;
 
+    if (isRoomFull.value === true) {
+      console.log(JSON.stringify(Player1Signal.value, null, 2));
+      console.log(JSON.stringify(Player1Signal.value, null, 2));
+      Player1Signal.value.inGameId.value = data.data.activePlayers[Player1Signal.value.playerName.peek()].id;
+      Player2Signal.value.playerName.value = data.data.gameRoom.filter(
+        name => name !== Player1Signal.value.playerName.peek()
+      )[0];
+      Player2Signal.value.inGameId.value = data.data.activePlayers[Player2Signal.value.playerName.peek()].id;
+      Player2Signal.value.playerId.value = data.data.activePlayers[Player2Signal.value.playerName.peek()].playerId;
+
+      playersInBattle.value = data.data.activePlayers;
+      if (!data.data.gameRoom.includes(Player1Signal.value.playerName.peek())) return;
+      currentPlayer.value =
+        data.data.activePlayers[Player1Signal.value.playerName.peek()].id === '1' ? 'Player1' : 'Player2';
+      Player1Signal.value.playerId.value = data.data.activePlayers[Player1Signal.value.playerName.peek()].playerId;
+    }
+
     playersInBattle.value = data.data.activePlayers;
     if (!data.data.gameRoom.includes(Player1Signal.value.playerName.peek())) return;
     console.log(`playername ${Player1Signal.value.playerName.peek()}`);
@@ -52,29 +69,14 @@ export const mapResponseMessages: ResponseMessageTypeMapper = {
     isRoomFull.value = data.data.roomFull;
     roomId.value = data.data.roomId;
 
-    if (data.data.gameRoom.length !== 2) return;
-
-    Player1Signal.value.inGameId.value = data.data.activePlayers[Player1Signal.value.playerName.peek()].id;
-
-    playersInBattle.value = data.data.activePlayers;
-    if (!data.data.gameRoom.includes(Player1Signal.value.playerName.peek())) return;
-    currentPlayer.value =
-      data.data.activePlayers[Player1Signal.value.playerName.peek()].id === '1' ? 'Player1' : 'Player2';
-    Player1Signal.value.playerId.value = data.data.activePlayers[Player1Signal.value.playerName.peek()].playerId;
-
     if (data.data.roomFull === false && data.data.gameRoom.length < 2) {
-      ('Match Found! Waiting on opponents...');
+      console.log('Match Found! Waiting on opponents...');
       return;
     }
 
-    if (data.data.gameRoom.length === 2) {
-      console.log(`Match Found! Your in! Good luck!`);
-      Player2Signal.value.playerName.value = data.data.gameRoom.filter(
-        name => name !== Player1Signal.value.playerName.peek()
-      )[0];
-      Player2Signal.value.inGameId.value = data.data.activePlayers[Player2Signal.value.playerName.peek()].id;
-      Player2Signal.value.playerId.value = data.data.activePlayers[Player2Signal.value.playerName.peek()].playerId;
-    }
+    if (data.data.gameRoom.length !== 2) return;
+
+    console.log(`Match Found! Your in! Good luck!`);
 
     console.log(
       `Welcome ${Player1Signal.value.playerName.peek()}, you are player ${data.data.activePlayers[Player1Signal.value.playerName.peek()].id}!`

@@ -55,9 +55,6 @@ export const Dialog = () => {
                 <AlertDialogDescription>{dialogSignal.value.description}</AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel onClick={dialogSignal.value.onCancel}>
-                  {dialogSignal.value.cancelButtonText}
-                </AlertDialogCancel>
                 <AlertDialogAction onClick={dialogSignal.value.onContinue}>
                   {dialogSignal.value.continueButtonText}
                 </AlertDialogAction>

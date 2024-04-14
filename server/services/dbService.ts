@@ -8,17 +8,19 @@ export const dbService = () => {
     if (error) {
       console.log(JSON.stringify(ids));
       console.log(`game creation failed be at db level: ${JSON.stringify(error)}`);
+      console.log(JSON.stringify({ players: ids }));
     }
     return { data, error };
   };
 
-  const updateGame = async ({ id: id, data }: { id: number; data: { ended_at: number; winner: number } }) => {
+  const updateGame = async ({ id: id, data }: { id: number; data: { ended_at: number; winner: number | null } }) => {
     const { error } = await supabase
       .from('games')
-      .update({ ...data })
+      .update({ ended_at: data.ended_at, winner: data.winner })
       .eq('id', id);
     if (error) {
       console.log(`game update failed be at db level: ${JSON.stringify(error)}`);
+      console.log(JSON.stringify({ id, data }));
     }
 
     return { error };

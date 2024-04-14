@@ -17,13 +17,15 @@ export const resetGame = () => {
     score: signal(0),
     playerPositions: signal<number[]>([]),
     playerTurn: 'Player1',
-    playerId: signal(0)
+    playerId: signal(0),
+    inGameId: signal('')
   };
   Player2Signal.value = {
     playerName: signal(''),
     score: signal(0),
     playerPositions: signal<number[]>([]),
     playerTurn: 'Player2',
-    playerId: signal(0)
+    playerId: signal(0),
+    inGameId: signal('')
   };
 };

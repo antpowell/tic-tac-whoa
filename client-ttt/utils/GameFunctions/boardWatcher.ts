@@ -3,10 +3,12 @@ import { findWinner } from './evaluateWinCondition';
 import getGameContext from '../state/GameContextState/GameContextState';
 import { GameState } from '../state/GameContextState/GameStateTypes';
 import { resetGame } from './resetGame';
+import { getSocketService } from '@/services/socketService';
 
 const { moves, gameStatus } = getGameContext();
 
 export const boardWatcher = () => {
+  const socketService = getSocketService().connect();
   if (moves.value > 4) {
     console.log(`evaluating game board...`);
     findWinner();
@@ -23,6 +25,7 @@ export const boardWatcher = () => {
       },
       onContinue: () => {
         resetGame();
+        socketService.emit('resetGame', { winner: null });
       }
     };
     gameStatus.value = GameState.Draw;
